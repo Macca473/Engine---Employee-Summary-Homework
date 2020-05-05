@@ -28,10 +28,10 @@ inquirer
       name: 'name',
       message: 'Enter Employees name:',
     },
-    {
-      name: 'role',
-      message: 'Enter Employees role:',
-    },
+    // {
+    //   name: 'role',
+    //   message: 'Enter Employees role:',
+    // },
     {
         name: 'email',
         message: 'Enter Employees email:',
@@ -42,16 +42,16 @@ inquirer
     },
     {
         type: 'rawlist',
-        name: 'employee type',
-        message: `Choose status:`,
+        name: 'role',
+        message: `Choose role:`,
         choices: ['Manager', 'Engineer',`Intern`],
     },
   ])
   .then(answers => {
     // console.info(`Answers:`, answers);
     console.log(`role: ${answers.role}`);
-    console.log(`Stats: ${answers.employees}`);
-    if (answers.employees === `Manager`) {
+    console.log(`Stats: ${answers.role}`);
+    if (answers.role === `Manager`) {
       // console.log(`ans Manager`);
       inquirer
         .prompt([
@@ -68,7 +68,7 @@ inquirer
           render(Ioutput);
         })
     }
-    else if (answers.employees === `Engineer`) {
+    else if (answers.role === `Engineer`) {
       // console.log(`ans Engineer`);
       inquirer
       .prompt([
@@ -85,7 +85,7 @@ inquirer
         render(Ioutput);
       })
     }
-    else if (answers.employees === `Intern`) {
+    else if (answers.role === `Intern`) {
       // console.log(`ans Intern`);
       inquirer
       .prompt([
@@ -104,7 +104,7 @@ inquirer
     }
   });
   
-
+// render(Ioutput);
 
 
 
