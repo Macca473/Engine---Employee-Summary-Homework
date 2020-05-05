@@ -20,6 +20,8 @@ class Employee {
   }
 }
 
+let Ioutput = [];
+
 inquirer
   .prompt([
     {
@@ -40,23 +42,77 @@ inquirer
     },
     {
         type: 'rawlist',
-        name: 'employees',
+        name: 'employee type',
         message: `Choose status:`,
         choices: ['Manager', 'Engineer',`Intern`],
     },
   ])
   .then(answers => {
-    // console.info('Answers:', answers);
-    // console.log(`role: ${answers.role}`);
-    switch(Employee) {
-      case answers.Manager: return Employee.Manager && console.log("Manager");
-        break;
-      case answers.Engineer: return Employee.Engineer && console.log("Engineer");
-        break;
-      case answers.Intern: return Employee.Intern && console.log("Intern");
-        break;
+    // console.info(`Answers:`, answers);
+    console.log(`role: ${answers.role}`);
+    console.log(`Stats: ${answers.employees}`);
+    if (answers.employees === `Manager`) {
+      // console.log(`ans Manager`);
+      inquirer
+        .prompt([
+          {
+            name: `officeMember`,
+            message:`Enter Employees office member info:`
+          }
+        ])
+        .then(info => {
+          console.info(`Answers:`, answers);
+          console.log(info);
+          let Ioutput = {...answers, ...info };
+          console.log(`Ioutput:`, Ioutput);
+          render(Ioutput);
+        })
+    }
+    else if (answers.employees === `Engineer`) {
+      // console.log(`ans Engineer`);
+      inquirer
+      .prompt([
+        {
+          name: `github`,
+          message:`Enter Employees github info:`
+        }
+      ])
+      .then(info => {
+        console.info(`Answers:`, answers);
+        console.log(info);
+        let Ioutput = {...answers, ...info };
+        console.log(`Ioutput:`, Ioutput);
+        render(Ioutput);
+      })
+    }
+    else if (answers.employees === `Intern`) {
+      // console.log(`ans Intern`);
+      inquirer
+      .prompt([
+        {
+          name: `school`,
+          message:`Enter Employees school:`
+        }
+      ])
+      .then(info => {
+        console.info(`Answers:`, answers);
+        console.log(info);
+        let Ioutput = {...answers, ...info };
+        console.log(`Ioutput:`, Ioutput);
+        render(Ioutput);
+      })
     }
   });
+  
+
+
+
+
+  // else if (newbie.newEmployrole === "Manager") {
+  //   const newbieManager = await roleManager()
+  //   let newManager = new Manager(newbie.name, newbie.id)
+  //   Employee.push new intern
+  // }
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
