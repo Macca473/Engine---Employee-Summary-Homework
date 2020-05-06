@@ -10,109 +10,101 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const OUT_DIR = path.resolve(__dirname, "output");
+let employees = [];
 
-class Employee {
-  constructor(Manager,Engineer,Intern) {
-    this.Manager = Manager;
-    this.Engineer = Engineer;
-    this.Intern = Intern;
-  }
-}
 
-let Ioutput = [];
+// loop forever until quit
+  // ask for employee stuff
+  // ask for role
+  // create appropriate employee (add to list)
+// end loop
+// render all employees
 
-inquirer
-  .prompt([
-    {
-      name: 'name',
-      message: 'Enter Employees name:',
-    },
-    // {
-    //   name: 'role',
-    //   message: 'Enter Employees role:',
-    // },
-    {
-        name: 'email',
-        message: 'Enter Employees email:',
-    },
-    {
-        name: 'id',
-        message: 'Enter Employees id:',
-    },
-    {
-        type: 'rawlist',
-        name: 'role',
-        message: `Choose role:`,
-        choices: ['Manager', 'Engineer',`Intern`],
-    },
-  ])
-  .then(answers => {
-    // console.info(`Answers:`, answers);
-    console.log(`role: ${answers.role}`);
-    console.log(`Stats: ${answers.role}`);
+
+async function main() {
+  
+  let looping = true;
+  while (looping) {
+    const answers = await inquirer.prompt([
+      {
+        name: 'name',
+        message: 'Enter Employees name:',
+      },
+      {
+          name: 'email',
+          message: 'Enter Employees email:',
+      },
+      {
+          name: 'id',
+          message: 'Enter Employees id:',
+      },
+      {
+          type: 'rawlist',
+          name: 'role',
+          message: `Choose role:`,
+          choices: ['Manager', 'Engineer',`Intern`],
+      },
+    ]);
+    
+    // console.log(`role: ${answers.role}`);
+    // console.log(`Stats: ${answers.role}`);
+    
     if (answers.role === `Manager`) {
       // console.log(`ans Manager`);
-      inquirer
-        .prompt([
-          {
-            name: `officeMember`,
-            message:`Enter Employees office member info:`
-          }
-        ])
-        .then(info => {
-          console.info(`Answers:`, answers);
-          console.log(info);
-          let Ioutput = {...answers, ...info };
-          console.log(`Ioutput:`, Ioutput);
-          render(Ioutput);
-        })
+      const info = await inquirer.prompt([
+        {
+          name: `officeMember`,
+          message:`Enter Employees office member info:`
+        }
+      ]);
+      
+      employees.push(new Manager(answers.name, answers.id, answers.email, info.officeMember));
+      console.log(employees);
     }
     else if (answers.role === `Engineer`) {
       // console.log(`ans Engineer`);
-      inquirer
-      .prompt([
+      const info = await inquirer.prompt([
         {
           name: `github`,
           message:`Enter Employees github info:`
         }
-      ])
-      .then(info => {
-        console.info(`Answers:`, answers);
-        console.log(info);
-        let Ioutput = {...answers, ...info };
-        console.log(`Ioutput:`, Ioutput);
-        render(Ioutput);
-      })
+      ]);
+      employees.push(new Engineer(answers.name, answers.id, answers.email, info.github));
+      console.log(employees);
     }
     else if (answers.role === `Intern`) {
       // console.log(`ans Intern`);
-      inquirer
-      .prompt([
+      const info = await inquirer.prompt([
         {
           name: `school`,
           message:`Enter Employees school:`
         }
       ])
-      .then(info => {
-        console.info(`Answers:`, answers);
-        console.log(info);
-        let Ioutput = {...answers, ...info };
-        console.log(`Ioutput:`, Ioutput);
-        render(Ioutput);
-      })
+      employees.push(new Intern(answers.name, answers.id, answers.email, info.school));
+      console.log(employees);
     }
-  });
+    
+    const confirm = await inquirer.prompt([
+      {
+        name: 'confirm',
+        message: 'Add another?',
+        type: "confirm"
+      }
+
+    ])
+    looping = confirm.confirm;
+  }
+  // end of loop
   
-// render(Ioutput);
+  console.log(`post`, employees);
+  const html = render(employees);
+  // // TODO use fs.writeFile to create output/test.html
+  fs.writeFile(`output/team.html`, html, function (err) {
+    if (err) throw err;
+  });
+}
 
-
-
-  // else if (newbie.newEmployrole === "Manager") {
-  //   const newbieManager = await roleManager()
-  //   let newManager = new Manager(newbie.name, newbie.id)
-  //   Employee.push new intern
-  // }
+main();
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
